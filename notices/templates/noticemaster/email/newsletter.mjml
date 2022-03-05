@@ -1,0 +1,54 @@
+{% load custom_tags %}
+{% load mjml %}
+{% load static %}
+
+
+{% mjml %}
+<mjml>
+    <mj-include path="./notices{% static "email-styles.css" %}" type="css" css-inline="inline" />
+
+    <mj-head>
+        <mj-font name="Material Icons" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+        <mj-attributes>
+            <mj-text color="#F45E43" />
+            <mj-accordion border="none" padding="1px" />
+            <mj-accordion-element icon-wrapped-url="https://i.imgur.com/Xvw0vjq.png" icon-unwrapped-url="https://i.imgur.com/KKHenWa.png" icon-height="24px" icon-width="24px" />
+            <mj-accordion-title color="#031017" font-size="18px" />
+            <mj-accordion-text padding="15px" color="#505050" font-size="14px" />
+        </mj-attributes>
+    </mj-head>
+    <mj-body>
+    <mj-section>
+      <mj-column>
+        <mj-text font-size="40px">{{ school_name }}</mj-text>
+        <mj-text font-size="20px">Daily Notices for {{ newsletter.issue_date }}</mj-text>
+        <mj-divider border-color="#F45E43" />
+      </mj-column>
+    </mj-section>
+
+    {% with tpl="noticemaster/email/partials/newsletter_section.mjml"  %}
+
+    {% include tpl with title="Meeting" notices=newsletter.meetings|only_subscribed:subscriber %}
+    {% include tpl with title="Upcoming Events" notices=newsletter.events|only_subscribed:subscriber %}
+    {% include tpl with title="Sports" notices=newsletter.sports|only_subscribed:subscriber %}
+    {% include tpl with title="General Notices" notices=newsletter.general_notices|only_subscribed:subscriber %}
+    {% include tpl with title="Unsubscribed Notices" notices=newsletter.notices|only_unsubscribed:subscriber %}
+
+    {% endwith %}
+
+    <mj-section>
+        <mj-column>
+            <mj-divider border-color="#F45E43" />
+            <mj-button background-color="#F45E43" href="{{ base_url }}{% url "subscriber_preferences" subscriber_id=subscriber.id subscriber_hash=subscriber.hash %}">Update Preferences</mj-button>
+            <mj-text align="center">
+                Made with ❤ by Thomas Hobson
+            </mj-text>
+            <mj-text align="center">
+                Direct any feature requests to thomas@hexf.me
+            </mj-text>
+        </mj-column>
+    </mj-section>
+
+  </mj-body>
+</mjml>
+{% endmjml %}

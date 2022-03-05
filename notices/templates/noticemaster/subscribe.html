@@ -1,0 +1,17 @@
+{% extends "noticemaster/_template.html" %}
+{% load crispy_forms_filters %}
+{% block body %}
+    <h1>{{ school_name }} Notices</h1>
+    <p>
+        Get the student notices delivered daily right to your inbox!
+    </p>
+
+
+
+    <form action="" method="post">
+        {% csrf_token %}
+
+        {{ form | crispy }}
+        <button type="submit" class="btn btn-primary">Subscribe</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "noticemaster/admin/_template.html" %}
+{% block title %}Preview{% endblock %}
+{% block body %}
+    <h1>Preview Newsletter: {{ newsletter.issue_date }}</h1>
+
+    <div class="row">
+        <div class="card mb-3">
+            <div class="card-header">
+                HTML
+                (
+                    <a href="{% url "preview_html" newsletter_id=newsletter.id subscriber_id=dummy_subscriber.id subscriber_hash=dummy_subscriber.hash %}">Open Full Screen</a>
+                )
+            </div>
+            <div class="card-body">
+                <iframe src="{% url "preview_html" newsletter_id=newsletter.id subscriber_id=dummy_subscriber.id subscriber_hash=dummy_subscriber.hash %}" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="card mb-3">
+            <div class="card-header">Text</div>
+            <div class="card-body">
+                <iframe src="{% url "preview_text" newsletter_id=newsletter.id subscriber_id=dummy_subscriber.id subscriber_hash=dummy_subscriber.hash %}" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        const resize=()=>document.querySelectorAll("iframe").forEach(f => {
+            f.height = f.contentDocument.body.scrollHeight;
+            f.style.width="100%";
+        });
+        window.onload = resize;
+
+    </script>
+{% endblock %}

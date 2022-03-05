@@ -1,0 +1,13 @@
+.subject-subtext {
+    font-size: 14px;
+    color: #505050;
+    line-height: 2;
+}
+
+.notice-tag {
+    background-color: #F45E43;
+    color: white;
+    border-radius: 25px;
+    padding: 2px 15px;
+
+}

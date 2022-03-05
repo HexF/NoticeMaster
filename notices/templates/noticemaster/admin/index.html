@@ -1,0 +1,97 @@
+{% extends "noticemaster/admin/_template.html" %}
+{% load crispy_forms_filters %}
+{% block title %}Home{% endblock %}
+{% block body %}
+    <div class="panel">
+    <h1>Issues</h1>
+    <form action="{% url "admin_new_issue" %}" method="post">
+        {% csrf_token %}
+        {{ create_issue_form | crispy }}
+        <button class="btn btn-success" type="submit">Create Issue</button>
+    </form>
+
+    {% if issues %}
+        <table class="table table-striped">
+            <tr class="table-dark">
+                <th>Issue</th>
+                <th>Actions</th>
+            </tr>
+            {% for issue in issues %}
+                <tr>
+                    <td>{{ issue }}</td>
+                    <td>
+                        <a href="{% url "admin_edit_issue" newsletter_id=issue.id %}" class="btn btn-primary">Edit</a>
+                        <a href="{% url "admin_preview_issue" newsletter_id=issue.id %}" class="btn btn-info">Preview</a>
+                        {% if not issue.published %}
+                        <a href="{% url "admin_publish_issue" newsletter_id=issue.id %}" class="btn btn-warning">Publish</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                
+            {% endfor %}
+        </table>
+    {% endif %}
+
+    <h1>Tags</h1>
+    <form action="{% url "admin_new_tag" %}" method="post" class="form mb-3">
+        {% csrf_token %}
+        {{  create_tag_form | crispy }}
+        <button type="submit" class="btn btn-success">Create Tag</button>
+    </form>
+    {% if tags %}
+        <table class="table table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Tag Category</th>
+                    <th>Tag Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tag in tags %}
+                    <tr>
+                        <td>
+                            {{ tag.get_type_display }}
+                            {% if tag.type == "U" %}
+                            <span class="badge bg-danger">Needs Updating</span>
+                            {% endif %} 
+                        </td>
+                        <td>{{ tag.name }}</td>
+                        <td>
+                            <a href="{% url "admin_edit_tag" tag_id=tag.id %}" class="btn btn-primary">Edit</a>
+                            <a href="{% url "admin_delete_tag" tag_id=tag.id %}" class="btn btn-danger {% if tag.notices.count > 0 %}disabled{% endif %} ">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <h1>Subscribers</h1>
+    <p>Count: {{ subscribers|length }}</p>
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Email</th>
+                <th>Opted-out Tags</th>
+                <th>Last Sent</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for subscriber in subscribers %}
+                <tr>
+                    <td>{{ subscriber.email }}</td>
+                    <td>
+                        {% for tag in subscriber.unsubscribed_tags.all %}
+                            <span class="badge bg-primary">{{ tag }}</span>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {{ subscriber.last_sent }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

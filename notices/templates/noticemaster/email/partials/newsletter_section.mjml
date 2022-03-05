@@ -1,0 +1,42 @@
+{% if notices %}
+    <mj-section>
+        <mj-column>
+            <mj-text font-size="24px">{{ title }}</mj-text>
+            <mj-text font-family="Material Icons" /> <!-- Include the font forcefully -->
+            <mj-accordion border="none">
+                    {% for notice in notices %}
+                        <mj-accordion-element>
+                            <mj-accordion-title>
+                                {{ notice.subject }} <br />
+                                {% if notice.meeting_location and notice.meeting_time %}
+                                    <span class="subject-subtext">
+
+                                        <i class="material-icons subject-subtext">place</i>
+                                        {{ notice.meeting_location }}
+                                        <i class="material-icons subject-subtext">schedule</i>
+                                        {{  notice.meeting_time }}
+                                    </span>
+                                {% elif notice.event_time %}
+                                    <i class="material-icons subject-subtext">today</i>
+                                    <span class="subject-subtext">{{ notice.event_time }}</span>
+                                {% endif %}
+                            </mj-accordion-title>
+
+                            <mj-accordion-text>
+                                <p>
+                                    <b>Teacher:</b> {{ notice.teacher }}
+                                </p>
+                                <p>
+                                    <b>Tags:</b>
+                                    {% for tag in notice.tags.all %}
+                                        <span class="notice-tag">{{ tag }}</span>
+                                    {% endfor %}
+                                </p>
+                                <p class="notice-body">{{ notice.body | linebreaksbr }}</p>
+                            </mj-accordion-text>
+                        </mj-accordion-element>
+                    {% endfor %}
+            </mj-accordion>
+        </mj-column>
+    </mj-section>
+  {% endif %}

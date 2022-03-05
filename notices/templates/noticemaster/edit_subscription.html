@@ -1,0 +1,35 @@
+{% extends "noticemaster/_template.html" %}
+{% block body %}
+    <h1>{{ school_name }} Notices</h1>
+    <h2>Edit your Subscription</h2>
+
+    <p>
+        You are editing the subscription for <b>{{ subscriber.email }}</b>
+    </p>
+    <a href="{% url "subscriber_unsubscribe" subscriber_hash=subscriber.hash subscriber_id=subscriber.id %}" class="btn btn-danger">Unsubscribe</a>
+
+    <h3 class="mt-3">Opt-out of notices</h3>
+    <p>
+        Check which categories you would like to opt-out of
+    </p>
+    <form action="" method="post">
+        {% csrf_token %}
+        {% for category_key, category_name in tag_categories %}
+            {% if category_key != "U" %}
+                <h4>{{ category_name }}</h4>
+                <div class="d-flex">
+                    {% for tag in tags %}
+                        {% if tag.type == category_key %}
+                            <div class="form-check me-3">
+                                <label class="form-check-label" for="optout-{{ tag.id }}">{{ tag.name }}</label>
+                                <input class="form-check-input" type="checkbox" name="optout" id="optout-{{ tag.id }}" value="{{ tag.id }}" {% if tag in subscriber.unsubscribed_tags.all %}checked{% endif %}>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endfor %}
+        <button type="submit" class="btn btn-success">Save</button>
+    </form>
+
+{% endblock %}

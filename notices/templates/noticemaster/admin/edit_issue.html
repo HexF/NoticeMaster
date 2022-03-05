@@ -1,0 +1,90 @@
+{% extends "noticemaster/admin/_template.html" %}
+{% load custom_tags %}
+{% load static %}
+{% block title %}Tag{% endblock %}
+{% block body %}
+    <script>
+        const period_times = JSON.parse("{{ period_times | json | safe | escapejs }}");
+        function presetBlock(id, timeKey){
+            const elem = document.getElementById(id);
+            const date = new Date(elem.value);
+            const [hr,min] = period_times[date.getDay()][timeKey];
+
+            date.setHours(hr, min, 0)
+
+            date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+            elem.value = date.toISOString().slice(0,16);
+        }
+    </script>
+    <script type="module">
+        import Tags from "{% static "tags.min.js" %}";
+        Tags.init()
+    </script>
+    <h1>Tagging notices for {{ newsletter.issue_date | date:"l jS F Y" }}</h1>
+    <p>
+        Set the times in the time field to the time for the meeting. <br/>
+        Prefer the notice text over the time displayed in the box. <br />
+        <br />
+        Tag each notice with the relevant tags. Year level tags are done automatically.
+    </p>
+    <form action="" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">Save</button>
+        <table class="table">
+            <thead class="table-dark">
+                <tr>
+                    <th style="width: 60%;">Notice Message</th>
+                    <th style="width: 20%;">Time & Location</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for notice in newsletter.notices.all %}
+                    <tr class="table-secondary">
+                        <th colspan="2">
+                            {{ notice.subject }}
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p class="body">{{ notice.body|linebreaksbr }}</p>
+                        </td>
+
+                        <td>
+                            <p>
+                                <b>Time:</b> {{ notice.datetime_text }} <br/>
+                                <b>Location</b>: {{ notice.meeting_location|escape }}
+                            </p>
+
+                            <input type="datetime-local" value="{{notice.meeting_time|date:'Y-m-d'}}T{{notice.meeting_time|time:'H:i:s'}}" name="notice[{{ notice.id }}].time" id="notice[{{ notice.id }}].time" class="form-control">
+                            <div class="mt-3">
+                                {% for i, name in period_names.items %}
+                                    <button type="button" onclick="presetBlock('notice[{{ notice.id }}].time', '{{ name }}')" class="btn btn-primary">
+                                        {{ name }}
+                                    </button>
+                                {% endfor %}
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="table-light">
+                        <td colspan="2">
+                            <select name="notice[{{ notice.id }}].tags" id="notice[{{ notice.id }}].tags" class="form-select" multiple data-allow-new="true">
+                                <option value="" selected="selected" disabled hidden>Choose a tag...</option>
+                                {% for tag in tags %}
+                                    <option
+                                            value="{{ tag.id }}"
+                                            {% if tag in notice.tags.all %}selected{% endif %}
+{#                                            {% if tag.type == tag.TagType.YEAR_LEVEL %}hidden{% endif %}#}
+                                    >{{ tag }}</option>
+                                {% endfor %}
+
+                            </select>
+                        </td>
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </form>
+
+{% endblock %}

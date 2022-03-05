@@ -1,0 +1,9 @@
+{% extends "noticemaster/_template.html" %}
+{% block body %}
+    <h1>{{ school_name }} Notices</h1>
+    <p>
+        You have been unsubscribed!
+    </p>
+    <a href="{% url "index" %}" class="btn btn-primary">Subscribe Again</a>
+
+{% endblock %}
