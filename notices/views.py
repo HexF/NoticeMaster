@@ -191,8 +191,10 @@ def preview_html(request, subscriber_id, subscriber_hash, newsletter_id):
     subscriber = get_object_or_404(Subscriber, id=subscriber_id)
     assert subscriber.hash() == subscriber_hash
 
+    base_url = "http://" + request.META["HTTP_HOST"]
+
     return HttpResponse(
-        render_email_html(request, "noticemaster/email/newsletter.mjml",
+        render_email_html(base_url, "noticemaster/email/newsletter.mjml",
                           get_object_or_404(Newsletter, id=newsletter_id),
                           subscriber
                           )
@@ -203,9 +205,10 @@ def preview_html(request, subscriber_id, subscriber_hash, newsletter_id):
 def preview_text(request, subscriber_id, subscriber_hash, newsletter_id):
     subscriber = get_object_or_404(Subscriber, id=subscriber_id)
     assert subscriber.hash() == subscriber_hash
+    base_url = "http://" + request.META["HTTP_HOST"]
 
     return HttpResponse(
-        render_email_text(request, "noticemaster/email/newsletter.mjml",
+        render_email_text(base_url, "noticemaster/email/newsletter.mjml",
                           get_object_or_404(Newsletter, id=newsletter_id),
                           subscriber
                           ),

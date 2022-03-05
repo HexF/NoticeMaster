@@ -89,12 +89,13 @@ def kamar_api_query(command: str, **kwargs) -> ET:
 
     return ET.fromstring(response.content)
 
+
 def get_notices_by_date(date: datetime.date) -> List[Notice]:
     day_str = f"{date.day}/{date.month}/{date.year}"
 
     notice_xml = kamar_api_query(
         "GetNotices",
-        Date = day_str
+        Date=day_str
     )
 
     notices = [
