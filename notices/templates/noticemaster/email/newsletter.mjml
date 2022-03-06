@@ -8,7 +8,6 @@
     <mj-include path="./notices{% static "email-styles.css" %}" type="css" css-inline="inline" />
 
     <mj-head>
-        <mj-font name="Material Icons" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
         <mj-attributes>
             <mj-text color="#F45E43" />
             <mj-accordion border="none" padding="1px" />

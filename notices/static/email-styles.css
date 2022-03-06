@@ -4,6 +4,12 @@
     line-height: 2;
 }
 
+
+.subject-subtext-icon {
+    height: 1rem;
+    vertical-align: text-bottom;
+}
+
 .notice-tag {
     background-color: #F45E43;
     color: white;

@@ -1,3 +1,4 @@
+{% load static %}
 {% if notices %}
     <mj-section>
         <mj-column>
@@ -10,14 +11,13 @@
                                 {{ notice.subject }} <br />
                                 {% if notice.meeting_location and notice.meeting_time %}
                                     <span class="subject-subtext">
-
-                                        <i class="material-icons subject-subtext">place</i>
+                                        <img class="subject-subtext-icon" src="{{ base_url }}{% static "img/map-marker.png" %}" alt="Located "/>
                                         {{ notice.meeting_location }}
-                                        <i class="material-icons subject-subtext">schedule</i>
+                                        <img style="margin-left: 10px;" class="subject-subtext-icon" src="{{ base_url }}{% static "img/clock-outline.png" %}" alt="at "/>
                                         {{  notice.meeting_time }}
                                     </span>
                                 {% elif notice.event_time %}
-                                    <i class="material-icons subject-subtext">today</i>
+                                    <img class="subject-subtext-icon" src="{{ base_url }}{% static "img/calendar.png" %}" alt="On "/>
                                     <span class="subject-subtext">{{ notice.event_time }}</span>
                                 {% endif %}
                             </mj-accordion-title>
