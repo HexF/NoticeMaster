@@ -9,5 +9,5 @@
     color: white;
     border-radius: 25px;
     padding: 2px 15px;
-
+    white-space: nowrap;
 }
