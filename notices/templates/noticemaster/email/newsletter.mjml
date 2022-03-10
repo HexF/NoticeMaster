@@ -31,7 +31,7 @@
     {% include tpl with title="Upcoming Events" notices=newsletter.events|only_subscribed:subscriber %}
     {% include tpl with title="Sports" notices=newsletter.sports|only_subscribed:subscriber %}
     {% include tpl with title="General Notices" notices=newsletter.general_notices|only_subscribed:subscriber %}
-    {% include tpl with title="Uncategorized Notices" notices=newsletter.remaining_notices|only_subscribed:subscriber %}
+{#    {% include tpl with title="Uncategorized Notices" notices=newsletter.remaining_notices|only_subscribed:subscriber %}#}
     {% include tpl with title="Unsubscribed Notices" notices=newsletter.notices|only_unsubscribed:subscriber %}
 
     {% endwith %}
