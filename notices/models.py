@@ -160,7 +160,6 @@ class Newsletter(models.Model):
         return self.notices.filter(
             meeting_location__isnull=True,
             meeting_time__isnull=True,
-            event_time__isnull=True
         ).exclude(
             tags__type__in=[
                 NoticeTag.TagType.SPORTS,
